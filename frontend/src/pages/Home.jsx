@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Container from "react-bootstrap/Container";
 
 import ResumeUpload from "../components/resume/ResumeUpload";
 import ResumePreview from "../components/resume/ResumePreview";
@@ -15,20 +16,15 @@ export default function Home() {
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState(null);
-
-  // Mock ATS result
   const [atsResult, setAtsResult] = useState(null);
 
   const handleUpload = (uploadedFile) => {
     setFile(uploadedFile);
     setStatus("uploading");
-
-    // simulate backend flow
     setLoading(true);
+    setAtsResult(null);
 
-    setTimeout(() => {
-      setStatus("scoring");
-    }, 1000);
+    setTimeout(() => setStatus("scoring"), 1000);
 
     setTimeout(() => {
       setLoading(false);
@@ -43,25 +39,50 @@ export default function Home() {
   };
 
   return (
-    <>
-      <h3 className="mb-3">Resume Analyzer</h3>
+    <Container className="py-4">
+      {/* CENTERED PAGE COLUMN */}
+      <div
+        className="mx-auto d-flex flex-column gap-4"
+        style={{ maxWidth: "820px" }}
+      >
+        {/* HEADER */}
+        <h3 className="text-center text-md-start">Resume Analyzer</h3>
 
-      <ResumeUpload onUpload={handleUpload} />
+        {/* UPLOAD */}
+        <ResumeUpload onUpload={handleUpload} />
 
-      <ResumeStatus status={status} />
+        {/* STATUS */}
+        {status && <ResumeStatus status={status} />}
 
-      {file && <ResumePreview file={file} />}
+        {/* PREVIEW */}
+        {file && <ResumePreview file={file} />}
 
-      {loading && <Loader text="Analyzing resume..." />}
+        {/* LOADER */}
+        {loading && <Loader text="Analyzing resume..." />}
 
-      {atsResult && (
-        <>
-          <ATSScoreCard score={atsResult.score} />
-          <ATSFeedback feedback={atsResult} />
-        </>
-      )}
+        {/* RESULTS */}
+        {atsResult && (
+          <div className="d-grid gap-3 gap-md-4">
+            <div className="d-md-flex gap-4 align-items-stretch">
+              <div style={{ minWidth: "220px" }}>
+                <ATSScoreCard score={atsResult.score} />
+              </div>
+              <div className="flex-grow-1">
+                <ATSFeedback feedback={atsResult} />
+              </div>
+            </div>
+          </div>
+        )}
 
-      <Alert variant="danger" message={alert} onClose={() => setAlert(null)} />
-    </>
+        {/* ALERT */}
+        {alert && (
+          <Alert
+            variant="danger"
+            message={alert}
+            onClose={() => setAlert(null)}
+          />
+        )}
+      </div>
+    </Container>
   );
 }

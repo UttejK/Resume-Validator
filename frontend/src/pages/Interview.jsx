@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Container from "react-bootstrap/Container";
+
 import ChatBox from "../components/chat/ChatBox";
 
 export default function Interview() {
@@ -28,9 +30,18 @@ export default function Interview() {
   };
 
   return (
-    <>
-      <h3 className="mb-3">Interview Mode</h3>
-      <ChatBox messages={messages} onSend={sendMessage} />
-    </>
+    <Container className="py-4">
+      {/* CENTERED PAGE COLUMN */}
+      <div
+        className="mx-auto d-flex flex-column gap-3"
+        style={{ maxWidth: "820px" }}
+      >
+        {/* HEADER */}
+        <h3 className="text-center text-md-start">Interview Mode</h3>
+
+        {/* CHAT */}
+        <ChatBox messages={messages} onSend={sendMessage} />
+      </div>
+    </Container>
   );
 }
